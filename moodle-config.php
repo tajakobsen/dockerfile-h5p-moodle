@@ -1,4 +1,4 @@
-<?php
+<?PHP
 ///////////////////////////////////////////////////////////////////////////
 //                                                                       //
 // Moodle configuration file                                             //
@@ -40,25 +40,25 @@ $CFG = new stdClass();
 
 $CFG->dbtype    = 'mysqli';      // 'pgsql', 'mariadb', 'mysqli', 'mssql', 'sqlsrv' or 'oci'
 $CFG->dblibrary = 'native';     // 'native' only at the moment
-$CFG->dbhost    = getenv('DB_PORT_3306_TCP_ADDR');  // eg 'localhost' or 'db.isp.com' or IP
-$CFG->dbname    = getenv('DB_ENV_MYSQL_DATABASE');     // database name, eg moodle
-$CFG->dbuser    = getenv('DB_ENV_MYSQL_USER');   // your database username
-$CFG->dbpass    = getenv('DB_ENV_MYSQL_PASSWORD');   // your database password
+$CFG->dbhost    = getenv('MYSQL_HOST');  // eg 'localhost' or 'db.isp.com' or IP
+$CFG->dbname    = getenv('MYSQL_DATABASE');     // database name, eg moodle
+$CFG->dbuser    = getenv('MYSQL_USER');   // your database username
+$CFG->dbpass    = getenv('MYSQL_PASSWORD');   // your database password
 $CFG->prefix    = 'mdl_';       // prefix to use for all table names
 $CFG->dboptions = array(
-    'dbpersist' => false,       // should persistent database connections be
-                                //  used? set to 'false' for the most stable
-                                //  setting, 'true' can improve performance
-                                //  sometimes
-    'dbsocket'  => false,       // should connection via UNIX socket be used?
-                                //  if you set it to 'true' or custom path
-                                //  here set dbhost to 'localhost',
-                                //  (please note mysql is always using socket
-                                //  if dbhost is 'localhost' - if you need
-                                //  local port connection use '127.0.0.1')
-    'dbport'    => getenv('DB_PORT_3306_TCP_PORT'),          // the TCP port number to use when connecting
-                                //  to the server. keep empty string for the
-                                //  default port
+  'dbpersist' => false,       // should persistent database connections be
+  //  used? set to 'false' for the most stable
+  //  setting, 'true' can improve performance
+  //  sometimes
+  'dbsocket'  => false,       // should connection via UNIX socket be used?
+  //  if you set it to 'true' or custom path
+  //  here set dbhost to 'localhost',
+  //  (please note mysql is always using socket
+  //  if dbhost is 'localhost' - if you need
+  //  local port connection use '127.0.0.1')
+  'dbport'    => '3306',          // the TCP port number to use when connecting
+  //  to the server. keep empty string for the
+  //  default port
 );
 
 
@@ -138,6 +138,10 @@ $CFG->admin = 'admin';
 // make it much longer. Note that you'll need to delete and manually update
 // any existing key.
 //      $CFG->mnetkeylifetime = 28;
+//
+// Not recommended: Set the following to true to allow the use
+// off non-Moodle standard characters in usernames.
+//      $CFG->extendedusernamechars = true;
 //
 // Allow user passwords to be included in backup files. Very dangerous
 // setting as far as it publishes password hashes that can be unencrypted
@@ -238,7 +242,7 @@ $CFG->admin = 'admin';
 //      $CFG->session_memcached_save_path = '127.0.0.1:11211';
 //      $CFG->session_memcached_prefix = 'memc.sess.key.';
 //      $CFG->session_memcached_acquire_lock_timeout = 120;
-//      $CFG->session_memcached_lock_expire = 7200;       // Ignored if memcached extension <= 2.1.0
+//      $CFG->session_memcached_lock_expire = 7200;       // Ignored if PECL memcached is below version 2.2.0
 //
 //   Memcache session handler (requires memcached server and memcache extension):
 //      $CFG->session_handler_class = '\core\session\memcache';
@@ -279,7 +283,7 @@ $CFG->admin = 'admin';
 //      $CFG->reverseproxy = true;
 //
 // Enable when using external SSL appliance for performance reasons.
-// Please note that site may be accessible via https: or https:, but not both!
+// Please note that site may be accessible via http: or https:, but not both!
 //      $CFG->sslproxy = true;
 //
 // This setting will cause the userdate() function not to fix %d in
@@ -336,15 +340,6 @@ $CFG->admin = 'admin';
 //   then all non-teachers will always see these for every person.
 //       $CFG->forcefirstname = 'Bruce';
 //       $CFG->forcelastname  = 'Simpson';
-//
-// The following setting will turn SQL Error logging on. This will output an
-// entry in apache error log indicating the position of the error and the statement
-// called. This option will action disregarding error_reporting setting.
-//     $CFG->dblogerror = true;
-//
-// The following setting will log every database query to a table called adodb_logsql.
-// Use this setting on a development server only, the table grows quickly!
-//     $CFG->logsql = true;
 //
 // The following setting will turn on username logging into Apache log. For full details regarding setting
 // up of this function please refer to the install section of the document.
@@ -503,7 +498,7 @@ $CFG->admin = 'admin';
 //      Uses lock files stored by default in the dataroot. Whether this
 //      works on clusters depends on the file system used for the dataroot.
 //
-// "\\core\\lock\\db_row_lock_factory" - DB locking based on table rows.
+// "\\core\\lock\\db_record_lock_factory" - DB locking based on table rows.
 //
 // "\\core\\lock\\postgres_lock_factory" - DB locking based on postgres advisory locks.
 //
@@ -685,7 +680,7 @@ $CFG->admin = 'admin';
 // (the basic and behat_* ones) to avoid problems with production environments. This setting can be
 // used to expand the default white list with an array of extra settings.
 // Example:
-//   $CFG->behat_extraallowedsettings = array('logsql', 'dblogerror');
+//   $CFG->behat_extraallowedsettings = array('somecoresetting', ...);
 //
 // You should explicitly allow the usage of the deprecated behat steps, otherwise an exception will
 // be thrown when using them. The setting is disabled by default.
@@ -716,40 +711,6 @@ $CFG->admin = 'admin';
 // generated by this tool, but only in case you want to generate a JMeter test. The value should be a string.
 // Example:
 //   $CFG->tool_generator_users_password = 'examplepassword';
-//
-//=========================================================================
-// 13. SYSTEM PATHS (You need to set following, depending on your system)
-//=========================================================================
-// Ghostscript path.
-// On most Linux installs, this can be left as '/usr/bin/gs'.
-// On Windows it will be something like 'c:\gs\bin\gswin32c.exe' (make sure
-// there are no spaces in the path - if necessary copy the files 'gswin32c.exe'
-// and 'gsdll32.dll' to a new folder without a space in the path)
-//      $CFG->pathtogs = '/usr/bin/gs';
-//
-// Clam AV path.
-// Probably something like /usr/bin/clamscan or /usr/bin/clamdscan. You need
-// this in order for clam AV to run.
-//      $CFG->pathtoclam = '';
-//
-// Path to du.
-// Probably something like /usr/bin/du. If you enter this, pages that display
-// directory contents will run much faster for directories with a lot of files.
-//      $CFG->pathtodu = '';
-//
-// Path to aspell.
-// To use spell-checking within the editor, you MUST have aspell 0.50 or later
-// installed on your server, and you must specify the correct path to access the
-// aspell binary. On Unix/Linux systems, this path is usually /usr/bin/aspell,
-// but it might be something else.
-//      $CFG->aspellpath = '';
-//
-// Path to dot.
-// Probably something like /usr/bin/dot. To be able to generate graphics from
-// DOT files, you must have installed the dot executable and point to it here.
-// Note that, for now, this only used by the profiling features
-// (Development->Profiling) built into Moodle.
-//      $CFG->pathtodot = '';
 
 //=========================================================================
 // ALL DONE!  To continue installation, visit your main page with a browser

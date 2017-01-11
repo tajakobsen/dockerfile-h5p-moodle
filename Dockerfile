@@ -1,6 +1,6 @@
 # Dockerfile for moodle instance. more dockerish version of https://github.com/sergiogomez/docker-moodle
 # Forked from Jon Auer's docker version. https://github.com/jda/docker-moodle
-FROM ubuntu:16.04
+FROM ubuntu:14.04
 MAINTAINER Tom Arild Jakobsen <tajakobsen@gmail.com>
 # MAINTAINER Jonathan Hardison <jmh@jonathanhardison.com>
 #Original Maintainer Jon Auer <jda@coldshore.com>
@@ -26,11 +26,11 @@ ENV MOODLE_URL http://localhost:8080
 ADD ./foreground.sh /etc/apache2/foreground.sh
 
 RUN apt-get update && \
-	apt-get -y install mysql-client pwgen python-setuptools curl git unzip apache2 php \
-		php-gd libapache2-mod-php postfix wget supervisor php-pgsql curl libcurl3 \
-		libcurl3-dev php-curl php-xmlrpc php-intl php-mysql git-core php-xml php-mbstring php-zip php-soap && \
+    apt-get -y install mysql-client pwgen python-setuptools curl git-core unzip apache2 php5 \
+    graphviz aspell php5-pspell php5-curl php5-gd php5-intl php5-mysql php5-xmlrpc php5-ldap && \
+    service apache2 restart && \
 	cd /tmp && \
-	git clone -b master git://git.moodle.org/moodle.git  --single-branch --depth=1 && \
+	git clone -b v2.7.18 git://git.moodle.org/moodle.git --depth=1 && \
 	mv /tmp/moodle/* /var/www/html/ && \
 	rm /var/www/html/index.html && \
 	chown -R www-data:www-data /var/www/html && \
