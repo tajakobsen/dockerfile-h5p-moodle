@@ -3,5 +3,5 @@
 To build image run:
 
 ```bash
-docker build -t tajakobsen/h5p-moodle:3.2.1 .
+docker build -t tajakobsen/h5p-moodle:latest .
 ```
