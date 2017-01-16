@@ -31,6 +31,10 @@ unset($CFG);  // Ignore this line
 global $CFG;  // This is necessary here for PHPUnit execution
 $CFG = new stdClass();
 
+
+// H5P config
+$CFG->mod_hvp_dev = true;
+
 //=========================================================================
 // 1. DATABASE SETUP
 //=========================================================================
@@ -518,10 +522,13 @@ $CFG->admin = 'admin';
 //=========================================================================
 //
 // Force a debugging mode regardless the settings in the site administration
-// @error_reporting(E_ALL | E_STRICT); // NOT FOR PRODUCTION SERVERS!
-// @ini_set('display_errors', '1');    // NOT FOR PRODUCTION SERVERS!
-// $CFG->debug = (E_ALL | E_STRICT);   // === DEBUG_DEVELOPER - NOT FOR PRODUCTION SERVERS!
-// $CFG->debugdisplay = 1;             // NOT FOR PRODUCTION SERVERS!
+@error_reporting(E_ALL | E_STRICT); // NOT FOR PRODUCTION SERVERS!
+@ini_set('display_errors', '1');    // NOT FOR PRODUCTION SERVERS!
+@ini_set('upload_max_filesize', '100M');    // NOT FOR PRODUCTION SERVERS!
+@ini_set('post_max_size', '100M');    // NOT FOR PRODUCTION SERVERS!
+
+$CFG->debug = (E_ALL | E_STRICT);   // === DEBUG_DEVELOPER - NOT FOR PRODUCTION SERVERS!
+$CFG->debugdisplay = 1;             // NOT FOR PRODUCTION SERVERS!
 //
 // You can specify a comma separated list of user ids that that always see
 // debug messages, this overrides the debug flag in $CFG->debug and $CFG->debugdisplay
@@ -557,7 +564,7 @@ $CFG->admin = 'admin';
 //
 // When working with production data on test servers, no emails or other messages
 // should ever be send to real users
-// $CFG->noemailever = true;    // NOT FOR PRODUCTION SERVERS!
+$CFG->noemailever = true;    // NOT FOR PRODUCTION SERVERS!
 //
 // Divert all outgoing emails to this address to test and debug emailing features
 // $CFG->divertallemailsto = 'root@localhost.local'; // NOT FOR PRODUCTION SERVERS!
