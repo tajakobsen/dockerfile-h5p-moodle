@@ -5,7 +5,6 @@ MAINTAINER Tom Arild Jakobsen <tajakobsen@gmail.com>
 # MAINTAINER Jonathan Hardison <jmh@jonathanhardison.com>
 #Original Maintainer Jon Auer <jda@coldshore.com>
 
-VOLUME ["/var/moodledata"]
 EXPOSE 80 443
 COPY moodle-config.php /var/www/html/config.php
 
